@@ -9,11 +9,13 @@ import json
 
 # --- KONFIGURASI APP ---
 app = Flask(__name__, static_folder='static')
-app.secret_key = 'rahasia_negara_ratbook_secure_key_v3_final'
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 
+app.secret_key = os.environ.get('SECRET_KEY', 'rahasia_lokal_sementara') 
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # --- KONFIGURASI SUPABASE (POSTGRESQL) ---
-db_uri = 'postgresql://postgres.dabpevtundqjxiwenpyo:ratbook123@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres'
+db_uri = os.environ.get('DATABASE_URL')
+if not db_uri:
+    db_uri = 'postgresql://postgres.dabpevtundqjxiwenpyo:ratbook123@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres'
 
 # Fix untuk SQLAlchemy: ubah 'postgres://' jadi 'postgresql://'
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri.replace("postgres://", "postgresql://")
